@@ -1,5 +1,4 @@
 #!/bin/sh
-# vi: ft=sh
 
 : ${author:='John Ankarström'}
 

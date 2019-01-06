@@ -1,3 +1,2 @@
 #!/bin/sh
-# vi: ft=sh
 date '+%Y-%m-%dT%T'

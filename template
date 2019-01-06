@@ -1,5 +1,4 @@
 #!/bin/sh
-# vi: ft=sh
 
 case "$1" in
 (html)

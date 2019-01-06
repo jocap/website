@@ -1,5 +1,4 @@
 #!/bin/sh
-# vi: ft=sh
 
 entries=$(cat <<END
 src/installation.md
