@@ -1,0 +1,19 @@
+#!/bin/sh
+# vi: ft=sh
+
+entries=$(cat <<END
+src/installation.md
+END)
+
+first=$(echo "$entries" | head -1)
+datetime=$(cat "$first" | head -1)
+
+title='John Ankarström'
+content=$(echo "$entries" | while read entry; do
+	url="https://john.ankarstrom.se/${entry#src/}"
+	url="${url%.md}.html"
+	cat "$entry" | url="$url" ./entry-atom
+done)
+
+export title datetime content
+./template atom

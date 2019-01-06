@@ -1,0 +1,7 @@
+#!/bin/sh
+# vi: ft=sh
+find src/ -type f -name '*.md' | while read f; do
+	f="dst/${f#src/}"
+	f="${f%.md}.html"
+	gmake "$f"
+done

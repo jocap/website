@@ -1,0 +1,39 @@
+#!/bin/sh
+# vi: ft=sh
+
+case "$1" in
+(html)
+	cat <<-TEMPLATE;;
+	<!doctype html>
+	<meta charset="utf-8">
+	<title>$title</title>
+	<meta name="author" content="$author" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" href="style.css" />
+	$content
+TEMPLATE
+
+(atom)
+	cat <<-TEMPLATE;;
+	<?xml version="1.0" encoding="utf-8"?>
+	<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>$title</title>
+	<link href="https://john.ankarstrom.se/atom.xml" rel="self"/>
+	<link href="https://john.ankarstrom.se/"/>
+	<updated>$datetime</updated>
+	<id>https://john.ankarstrom.se/</id>
+	<author>
+		<name>John Ankarström</name>
+		<email>kontakt@ankarstrom.se</email>
+	</author>
+	$content
+	</feed>
+TEMPLATE
+
+(*)
+	cat <<USAGE > /dev/stderr
+usage: $0 type
+(where type = html or atom)
+USAGE
+	return 1
+esac

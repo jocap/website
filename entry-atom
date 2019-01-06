@@ -1,0 +1,29 @@
+#!/bin/sh
+# vi: ft=sh
+
+: ${author:='John Ankarström'}
+
+if [ -z "$url" ]; then
+	cat <<USAGE > /dev/stderr
+usage: url=url $0
+USAGE
+	return 1
+fi
+
+read datetime
+read title
+title=${title#\# }
+read meta
+text=$(cmark)
+
+cat <<CONTENT
+<entry>
+<title>$title</title>
+<link href="$url" />
+<updated>$datetime</updated>
+<content type="html"><![CDATA[
+$text
+]]>
+</content>
+</entry>
+CONTENT

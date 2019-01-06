@@ -1,0 +1,19 @@
+#!/bin/sh
+# vi: ft=sh
+
+: ${author:='John Ankarström'}
+
+read datetime
+read title
+title=${title#\# }
+read meta
+text=$(cmark)
+
+content=$(cat <<CONTENT
+<h1 id="title">$title</h1>
+<p id="meta">$meta</p>
+$text
+CONTENT)
+
+export author datetime title meta content
+./template html
