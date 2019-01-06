@@ -32,4 +32,4 @@ $list
 END)
 
 export title content
-bin/template html
+bin/html-page-tpl

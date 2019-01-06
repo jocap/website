@@ -15,4 +15,4 @@ content=$(echo "$entries" | while read entry; do
 done)
 
 export title datetime content
-bin/template atom
+bin/atom-index-tpl

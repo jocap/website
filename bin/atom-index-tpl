@@ -1,0 +1,17 @@
+#!/bin/sh
+
+cat <<TEMPLATE
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>$title</title>
+<link href="https://john.ankarstrom.se/atom.xml" rel="self"/>
+<link href="https://john.ankarstrom.se/"/>
+<updated>$datetime</updated>
+<id>https://john.ankarstrom.se/</id>
+<author>
+	<name>John Ankarström</name>
+	<email>kontakt@ankarstrom.se</email>
+</author>
+$content
+</feed>
+TEMPLATE

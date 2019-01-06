@@ -15,4 +15,4 @@ $text
 CONTENT)
 
 export author datetime title meta content
-bin/template html
+bin/html-page-tpl
