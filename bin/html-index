@@ -1,7 +1,7 @@
 #!/bin/sh
 
-title='John Ankarström'
-author='John Ankarström'
+: ${title:=John Ankarström}
+: ${author:=John Ankarström}
 
 index=$(cat <<END
 2018:

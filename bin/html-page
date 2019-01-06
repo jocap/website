@@ -1,6 +1,6 @@
 #!/bin/sh
 
-: ${author:='John Ankarström'}
+: ${author:=John Ankarström}
 
 read datetime
 read title
