@@ -16,3 +16,5 @@ dst/atom.xml:
 
 all:
 	bin/make-all
+
+site: all dst/index.html dst/atom.xml
