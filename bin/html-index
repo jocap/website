@@ -1,0 +1,35 @@
+#!/bin/sh
+
+title='John Ankarström'
+author='John Ankarström'
+
+index=$(cat <<END
+2018:
+OpenBSD;
+src/openbsd/installation.md
+END)
+
+list=$(echo "$index" | while read line; do
+	if [ $(echo "$line" | grep ':$') ]; then
+		echo "<h2>${line%:}</h2>" # year
+	elif [ $(echo "$line" | grep ';$') ]; then
+		echo "<h3>${line%;}</h3>" # topic
+	else
+		title=$(cat "$line" | head -n 2 | tail -n 1)
+		title="${title#\# }"
+		url="${line#src/}"
+		url="${url%.md}.html"
+		cat <<END
+<li><a href="$url">$title</a></li>
+END
+	fi
+done)
+
+content=$(cat <<END
+<ul>
+$list
+</ul>
+END)
+
+export title content
+bin/template html

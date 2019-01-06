@@ -1,7 +1,7 @@
 #!/bin/sh
 
 entries=$(cat <<END
-src/installation.md
+src/openbsd/installation.md
 END)
 
 first=$(echo "$entries" | head -1)
@@ -11,8 +11,8 @@ title='John Ankarström'
 content=$(echo "$entries" | while read entry; do
 	url="https://john.ankarstrom.se/${entry#src/}"
 	url="${url%.md}.html"
-	cat "$entry" | url="$url" ./entry-atom
+	cat "$entry" | url="$url" bin/atom-entry
 done)
 
 export title datetime content
-./template atom
+bin/template atom

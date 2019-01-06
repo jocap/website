@@ -4,3 +4,7 @@ find src/ -type f -name '*.md' | while read f; do
 	f="${f%.md}.html"
 	gmake "$f"
 done
+find src/ -type f -name '*.html' | while read f; do
+	f="dst/${f#src/}"
+	gmake "$f"
+done
