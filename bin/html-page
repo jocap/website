@@ -6,11 +6,11 @@ read datetime
 read title
 title=${title#\# }
 read meta
-text=$(cmark)
+text=$(bin/markdown)
 
 content=$(cat <<CONTENT
 <h1 id="title">$title</h1>
-<p id="meta">$meta</p>
+${meta:+<p id=\"meta\">$meta</p>}
 $text
 CONTENT)
 

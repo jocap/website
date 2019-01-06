@@ -1,0 +1,2 @@
+#!/bin/sh
+kramdown25 --transliterated-header-ids --toc-levels 1..3
