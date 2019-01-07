@@ -1,2 +1,2 @@
 #!/bin/sh
-date '+%Y-%m-%dT%T'
+date -z UTC +'%Y-%m-%dT%T+01:00' # CET
