@@ -1,7 +1,11 @@
 #!/bin/sh
 
 read
-read datetime title meta lang
+read datetime
+read title
+read meta
+read lang
+
 title=${title#\# }
 text=$(bin/markdown)
 

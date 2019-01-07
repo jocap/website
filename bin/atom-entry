@@ -8,7 +8,11 @@ USAGE
 fi
 
 read
-read datetime title meta lang
+read datetime
+read title
+read meta
+read lang
+
 title=${title#\# }
 text=$(cmark)
 
