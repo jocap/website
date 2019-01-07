@@ -8,11 +8,8 @@ USAGE
 fi
 
 read
-read datetime
-read title
+read datetime title meta lang
 title=${title#\# }
-read meta
-read lang
 text=$(cmark)
 
 cat <<CONTENT

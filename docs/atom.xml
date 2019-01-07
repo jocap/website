@@ -117,7 +117,7 @@ incomplete – in addition to standalone pages, I offer an index page,
 as well as an Atom feed – but all this other functionality is
 implemented similarly to that which I have showed above.</p>
 <p>If you're interested in seeing the entire system, check out the
-GitHub repository and the <code>bin/</code> directory in particular.</p>
+<a href="https://github.com/jocap/website">GitHub repository</a>, starting with the <code>Makefile</code>.</p>
 ]]>
 </content>
 </entry>
