@@ -1,13 +1,17 @@
 #!/bin/sh
 
 index=$(cat <<END
+2019:
+Web;
+src/web/these-pages.md
 2018:
 Web;
 src/web/separation-of-concerns.md
 src/web/instapaper-without-javascript.md
 src/english/texts/replacing-javascript/
 OpenBSD;
-src/openbsd/installation.md
+src/openbsd/man-pages.md
+src/openbsd/partitioning.md
 src/openbsd/browser-refresh-on-save.md
 END)
 

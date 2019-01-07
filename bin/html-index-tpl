@@ -1,0 +1,22 @@
+#!/bin/sh
+
+cat <<TEMPLATE
+<div id="index">
+<header>
+<h1>$title</h1>
+<a href="svenska/cv.html" title="Cirriculum vitae (in Swedish)">cv</a>
+</header>
+<p>
+My name is <abbr title="kontakt [at] my last name without the dots
+[dot] se">John</abbr>.  I study <abbr title="Russian, Swedish,
+German, linguistics">language</abbr> at Uppsala University, and in
+my free time, I dabble in <abbr title="Programming language design,
+web development, OpenBSD">technology</abbr>.
+</p>
+<h2>Projects</h2>
+<ul>
+	<li><a href="https://lamnafacebook.nu/">Lämna Facebook</a></li>
+</ul>
+$content
+</div>
+TEMPLATE

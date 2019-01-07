@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>How I generate these pages</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/dst/style.css" />
+<link href="file:///home/john/Sites/sh/dst/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<article>
+<h1 id="title">How I generate these pages</h1>
+<p id="meta"><time datetime="2019-01-07T13:42:54+01:00">(January, 2019)</time></p>
+<div id="text">
+
+<p>This website used to be created with Jekyll, a static site generator
+natively supported by GitHub Pages.  While this setup certainly is
+capable, I came to realize that it didn’t fit my needs:</p>
+
+<ul>
+  <li>
+    <p>Jekyll gave me very little control over the final directory
+structure of my site.  Whereas what I wanted was a one-to-one
+correlation between the organization of my website and that of
+my local file system, what I got was a one-size-fits-all blog.</p>
+  </li>
+  <li>
+    <p>There were discrepancies between my local installation of Jekyll
+and that used by GitHub Pages – especially with regards to the
+directory structure – which made it hard for me to foretell
+what the finished site would look like after publishing it.</p>
+  </li>
+  <li>
+    <p>Speaking of which – what <em>is</em> the benefit of having GitHub Pages
+generate your site, compared with generating it locally (which
+you’d almost always do anyway) and uploading the results?</p>
+  </li>
+</ul>
+
+<p>These weren’t unmanageable problems, and I used Jekyll from September
+till now.  However, my setup felt unwieldy and fragile, which brings
+me to …</p>
+
+<h2 id="section">2019</h2>
+
+<p>Another year, another rewrite.  I started with a single Markdown
+document and wrote a shell script, <code>bin/html-page</code>, to translate
+it into a standalone HTML page:</p>
+
+<pre><code>#!/bin/sh
+
+# (1)
+read
+read datetime
+read title
+title=${title#\# }
+read meta
+read lang
+text=$(bin/markdown)
+
+# (2)
+content=$(cat &lt;&lt;CONTENT
+&lt;article&gt;
+&lt;h1 id="title"&gt;$title&lt;/h1&gt;
+${meta:+&lt;p id=\"meta\"&gt;&lt;time datetime=\"$datetime\"&gt;$meta&lt;/time&gt;&lt;/p&gt;}
+&lt;div id="text"&gt;
+$text
+&lt;/div&gt;
+&lt;/article&gt;
+CONTENT)
+
+# (3)
+export lang author datetime title meta content
+bin/html-page-tpl
+</code></pre>
+
+<ol>
+  <li>
+    <p>All Markdown documents begin with a block of metadata, as specified
+in the beginning of this file.  The title can optionally begin with
+a hash, as per Markdown syntax.  The text is retrieved from the
+program specified in <code>bin/markdown</code>, receiving the rest of the text
+via the standard input.</p>
+  </li>
+  <li>
+    <p>Then follows the template for a single HTML article, containing
+every piece of information specified in the original Markdown file,
+but lacking the scaffolding required by a full HTML document.</p>
+  </li>
+  <li>
+    <p>Finally, all variables are exported to be used by the template
+specified in <code>bin/html-page-tpl</code>.</p>
+  </li>
+</ol>
+
+<p>Apropos, <code>bin/html-page-tpl</code> is a very simple file.  It uses <code>cat</code>
+in combination with “here documents” to create a simple (but capable)
+templating engine – no Liquid or ERB needed:</p>
+
+<pre><code>#!/bin/sh
+
+cat &lt;&lt;TEMPLATE
+&lt;!doctype html&gt;
+&lt;html lang="$lang"&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;title&gt;$title&lt;/title&gt;
+&lt;meta name="author" content="$author" /&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /&gt;
+&lt;link rel="stylesheet" href="$base/style.css" /&gt;
+$content
+&lt;/html&gt;
+TEMPLATE
+</code></pre>
+
+<p>To wrap it all up, a simple (GNU)makefile handles the file system
+operations, taking Markdown files from <code>src/</code> and creating HTML
+files in <code>dst/</code>:</p>
+
+<pre><code>dst/%.html: src/%.md bin/html-page bin/html-page-tpl
+	mkdir -p $$(dirname $@)
+	cat $&lt; | bin/html-page &gt; $@
+</code></pre>
+
+<hr />
+
+<p>That’s the basic description of the system.  Of course, it is
+incomplete – in addition to standalone pages, I offer an index page,
+as well as an Atom feed – but all this other functionality is
+implemented similarly to that which I have showed above.</p>
+
+<p>If you’re interested in seeing the entire system, check out the
+GitHub repository and the <code>bin/</code> directory in particular.</p>
+</div>
+</article>
+</html>

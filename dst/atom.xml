@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>John Ankarström</title>
+<link href="https://john.ankarstrom.se/atom.xml" rel="self"/>
+<link href="https://john.ankarstrom.se/"/>
+<updated></updated>
+<id>https://john.ankarstrom.se/</id>
+<author>
+	<name>John Ankarström</name>
+	<email>kontakt@ankarstrom.se</email>
+</author>
+<entry>
+<title>How I generate these pages</title>
+<link href="https://john.ankarstrom.se/web/these-pages.html" />
+<updated>2019-01-07T13:42:54+01:00</updated>
+<content type="html"><![CDATA[
+<p>This website used to be created with Jekyll, a static site generator
+natively supported by GitHub Pages.  While this setup certainly is
+capable, I came to realize that it didn't fit my needs:</p>
+<ul>
+<li>
+<p>Jekyll gave me very little control over the final directory
+structure of my site.  Whereas what I wanted was a one-to-one
+correlation between the organization of my website and that of
+my local file system, what I got was a one-size-fits-all blog.</p>
+</li>
+<li>
+<p>There were discrepancies between my local installation of Jekyll
+and that used by GitHub Pages – especially with regards to the
+directory structure – which made it hard for me to foretell
+what the finished site would look like after publishing it.</p>
+</li>
+<li>
+<p>Speaking of which – what <em>is</em> the benefit of having GitHub Pages
+generate your site, compared with generating it locally (which
+you'd almost always do anyway) and uploading the results?</p>
+</li>
+</ul>
+<p>These weren't unmanageable problems, and I used Jekyll from September
+till now.  However, my setup felt unwieldy and fragile, which brings
+me to ...</p>
+<h2>2019</h2>
+<p>Another year, another rewrite.  I started with a single Markdown
+document and wrote a shell script, <code>bin/html-page</code>, to translate
+it into a standalone HTML page:</p>
+<pre><code>#!/bin/sh
+
+# (1)
+read
+read datetime
+read title
+title=${title#\# }
+read meta
+read lang
+text=$(bin/markdown)
+
+# (2)
+content=$(cat &lt;&lt;CONTENT
+&lt;article&gt;
+&lt;h1 id=&quot;title&quot;&gt;$title&lt;/h1&gt;
+${meta:+&lt;p id=\&quot;meta\&quot;&gt;&lt;time datetime=\&quot;$datetime\&quot;&gt;$meta&lt;/time&gt;&lt;/p&gt;}
+&lt;div id=&quot;text&quot;&gt;
+$text
+&lt;/div&gt;
+&lt;/article&gt;
+CONTENT)
+
+# (3)
+export lang author datetime title meta content
+bin/html-page-tpl
+</code></pre>
+<ol>
+<li>
+<p>All Markdown documents begin with a block of metadata, as specified
+in the beginning of this file.  The title can optionally begin with
+a hash, as per Markdown syntax.  The text is retrieved from the
+program specified in <code>bin/markdown</code>, receiving the rest of the text
+via the standard input.</p>
+</li>
+<li>
+<p>Then follows the template for a single HTML article, containing
+every piece of information specified in the original Markdown file,
+but lacking the scaffolding required by a full HTML document.</p>
+</li>
+<li>
+<p>Finally, all variables are exported to be used by the template
+specified in <code>bin/html-page-tpl</code>.</p>
+</li>
+</ol>
+<p>Apropos, <code>bin/html-page-tpl</code> is a very simple file.  It uses <code>cat</code>
+in combination with &quot;here documents&quot; to create a simple (but capable)
+templating engine – no Liquid or ERB needed:</p>
+<pre><code>#!/bin/sh
+
+cat &lt;&lt;TEMPLATE
+&lt;!doctype html&gt;
+&lt;html lang=&quot;$lang&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;$title&lt;/title&gt;
+&lt;meta name=&quot;author&quot; content=&quot;$author&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$base/style.css&quot; /&gt;
+$content
+&lt;/html&gt;
+TEMPLATE
+</code></pre>
+<p>To wrap it all up, a simple (GNU)makefile handles the file system
+operations, taking Markdown files from <code>src/</code> and creating HTML
+files in <code>dst/</code>:</p>
+<pre><code>dst/%.html: src/%.md bin/html-page bin/html-page-tpl
+	mkdir -p $$(dirname $@)
+	cat $&lt; | bin/html-page &gt; $@
+</code></pre>
+<hr />
+<p>That's the basic description of the system.  Of course, it is
+incomplete – in addition to standalone pages, I offer an index page,
+as well as an Atom feed – but all this other functionality is
+implemented similarly to that which I have showed above.</p>
+<p>If you're interested in seeing the entire system, check out the
+GitHub repository and the <code>bin/</code> directory in particular.</p>
+]]>
+</content>
+</entry>
+<entry>
+<title>Instapaper bookmarklet without JavaScript</title>
+<link href="https://john.ankarstrom.se/web/instapaper-without-javascript.html" />
+<updated>2018-10-04T00:00:00+01:00</updated>
+<content type="html"><![CDATA[
+<p>For the most part, I browse the web with JavaScript disabled by
+default (via <a href="https://noscript.net">NoScript</a>).  I also use <a href="https://instapaper.com">Instapaper</a>
+to save articles for later.  Unfortunately, the bookmarklet[^b]
+provided by Instapaper requires JavaScript to be enabled on the
+site to be saved.</p>
+<p>For this reason, I cobbled together my own bookmarklet, inspired
+by the ones provided by <a href="https://pinboard.in">Pinboard</a> (an even better service):</p>
+<pre><code>javascript:void(open('https://www.instapaper.com/hello2?u='+encodeURIComponent(location.href)+'&amp;t='+(document.title),'Instapaper','toolbar=no,width=500,height=350'))
+</code></pre>
+<p>Here it is as a link that you can drag to your bookmarks:
+<a href="javascript:void(open('https://www.instapaper.com/hello2?u='+encodeURIComponent(location.href)+'&t='+(document.title),'Instapaper','toolbar=no,width=500,height=350'))">Add to Instapaper</a></p>
+<hr />
+<p>[^b]: &quot;A bookmarklet is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser.&quot; -- <a href="https://en.wikipedia.org/wiki/Bookmarklet">Wikipedia</a></p>
+]]>
+</content>
+</entry>
+<entry>
+<title>Viewing man pages as HTML and PDF</title>
+<link href="https://john.ankarstrom.se/openbsd/man-pages.html" />
+<updated>2018-10-01T01:00:00+01:00</updated>
+<content type="html"><![CDATA[
+<p>If you've read about OpenBSD before, you've probably been advised
+to read the man pages.  I'll echo this advice, because the man pages
+are usually very good.</p>
+<p>However, reading man pages through <code>less</code> leaves a lot to be desired,
+both in terms of readability and navigation.  Fortunately, you can
+easily convert man pages to PDF or HTML (insert your favorite PDF
+reader or WWW browser):</p>
+<pre><code>MANPAGER=mupdf man -T pdf intro
+MANPAGER=seamonkey man -T html intro
+</code></pre>
+<p>The PDF pages are much easier to read thanks to the typography,
+while the HTML pages are much easier to browse thanks to the
+hyperlinks.  (They would be improved even further by a script that
+generates tables of contents.)</p>
+<hr />
+<p>If you use Chromium, you might find that the line above doesn't
+quite work: Chromium seems to interpret and display the temporary
+file, lacking a <code>.html</code> extension, as a plain text file.</p>
+<p>The following script fixes that and should work with any <code>$BROWSER</code>:</p>
+<pre><code>#!/bin/sh
+
+# open man page as HTML document
+# (with .html to make sure Chrome displays it correctly)
+
+file=$(mktemp /tmp/man.XXXXXX) || exit 1
+mv $file $file.html
+MANPAGER=cat man -T html $@ &gt; $file.html
+$BROWSER $file.html
+rm $file.html
+</code></pre>
+]]>
+</content>
+</entry>
+<entry>
+<title>How I partition OpenBSD</title>
+<link href="https://john.ankarstrom.se/openbsd/partitioning.html" />
+<updated>2018-10-01T00:00:00+01:00</updated>
+<content type="html"><![CDATA[
+<p>For the search engines, here are a couple of keywords: <strong>how to
+easily install OpenBSD on an existing partition</strong>.</p>
+<p>OpenBSD lacks a graphical installer.  Luckily, the text-based
+installer is one of the best I've used.  However -- as always, when
+it comes to disk partitioning, you need to be sure about what you're
+doing, and when I first tried to install OpenBSD, I just couldn't
+wrap my head around the version of <code>fdisk</code> provided by OpenBSD.
+Here's what I did instead:</p>
+<ol>
+<li>Booted back into Debian</li>
+<li>Used Debian's <code>fdisk</code> to create an OpenBSD partition (A6)</li>
+<li>Resumed the installation process</li>
+</ol>
+<p>At this point, you're asked if you want to install the system onto
+the already existing OpenBSD partition -- no further partitioning needed!</p>
+<hr />
+<p>I ended up with the following partitions:</p>
+<pre><code>Filesystem     Size    Used   Avail Capacity  Mounted on
+/dev/sd0a     1005M    128M    826M    13%    /
+/dev/sd0o     46.6G    3.8G   40.5G     9%    /home
+/dev/sd0d      3.9G    2.3M    3.7G     0%    /tmp
+/dev/sd0f      2.0G    1.4G    472M    75%    /usr
+/dev/sd0g     1005M    193M    761M    20%    /usr/X11R6
+/dev/sd0h      9.8G    4.9G    4.4G    53%    /usr/local
+/dev/sd0n      5.9G    6.0K    5.6G     0%    /usr/obj
+/dev/sd0m      2.0G    504M    1.4G    26%    /usr/src
+/dev/sd0e     11.0G    102M   10.3G     1%    /var
+</code></pre>
+<p>As you can see, a huge <code>/home</code> partition, but a rather small <code>/usr</code>
+partition.  Normally, this shouldn't be a problem, but as I was
+compiling a port of the music player <a href="https://strawbs.org/">strawberry</a>, I ran out of
+space!</p>
+<p>As it turns out, the compilation process in <code>/usr/ports</code> was putting
+tons of object and source files in directories under <code>/usr</code>, but
+not in those designated for them: <code>/usr/obj</code> and <code>/usr/src</code>.  I
+solved this by adding the following to my <code>/etc/mk.conf</code>:</p>
+<pre><code>WRKOBJDIR=/usr/obj
+DISTDIR=/usr/src
+</code></pre>
+<p>As such, have a few search engine keywords: <strong>how to avoid running out of space in /usr on OpenBSD.</strong></p>
+]]>
+</content>
+</entry>
+<entry>
+<title>Web browser refresh on save with kqueue(2)</title>
+<link href="https://john.ankarstrom.se/openbsd/browser-refresh-on-save.html" />
+<updated>2018-09-24T00:00:00+01:00</updated>
+<content type="html"><![CDATA[
+<p>It's been done a million times -- &quot;how to automatically refresh
+browser upon saving file&quot; -- so why not do it again?  Here's my
+take on it.</p>
+<h2>1. File watcher</h2>
+<p>I looked around, and OpenBSD didn't seem to include any command
+line utility for watching files.  It does provide the <code>kqueue(2)</code>
+interface for C programs, though, so I decided to write a simple
+command-line tool using that.</p>
+<p>I call it <code>watch</code>, and <a href="https://github.com/jocap/kq-watch/blob/master/watch.c">its source</a> is available on GitHub[^feedback].
+It works like this:</p>
+<pre><code>&gt; watch my-file
+</code></pre>
+<p>For every write to <code>my-file</code>, a new line will be written to the
+standard output containing the file's name (as provided in <code>argv</code>).
+If the file is renamed, a warning is issued to <code>stderr</code>.  If the
+file is deleted, an error is issued and the program terminates.</p>
+<p>Those warnings and errors are helpful when dealing with text editors
+that do &quot;atomic&quot; or otherwise weird saving, like vim or, in my case,
+<a href="https://github.com/martanne/vis/">vis</a>.</p>
+<h2>2. Editor configuration</h2>
+<p>To disable atomic saving for vis, I've got the following in my <code>visrc.lua</code>:</p>
+<pre><code>vis.events.subscribe(vis.events.WIN_OPEN, function(win)
+        vis:command('set savemethod inplace')
+end)
+</code></pre>
+<h2>3. Browser refresh</h2>
+<p>Upon every file write, I use <code>xdotool</code> to send the F5 key to Firefox or Seamonkey:</p>
+<pre><code>watch my-file | while read; do xdotool search --onlyvisible --classname Navigator key F5; done
+</code></pre>
+<p>I put this in a shell script called <code>refresh</code>:</p>
+<pre><code>#!/bin/sh
+watch &quot;$1&quot; | while read; do xdotool search --onlyvisible --classname Navigator key F5; done
+</code></pre>
+<p>Personally, I think that's pretty good.</p>
+<hr />
+<p>[^feedback]: Feedback more than welcome!</p>
+]]>
+</content>
+</entry>
+</feed>

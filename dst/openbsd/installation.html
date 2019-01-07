@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>How I partition OpenBSD</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/dst/style.css" />
+<link href="file:///home/john/Sites/sh/dst/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<article>
+<h1 id="title">How I partition OpenBSD</h1>
+<p id="meta"><time datetime="2018-10-01T00:00:00+01:00">(October, 2018)</time></p>
+<div id="text">
+
+<h2 id="partitioning">Partitioning</h2>
+
+<p>For the search engines, here are a couple of keywords: <strong>how to
+easily install OpenBSD on an existing partition</strong>.</p>
+
+<p>OpenBSD lacks a graphical installer.  Luckily, the text-based
+installer is one of the best I’ve used.  However – as always, when
+it comes to disk partitioning, you need to be sure about what you’re
+doing, and I just couldn’t figure out how to use the version of
+<code>fdisk</code> provided by OpenBSD.  Here’s what I did instead:</p>
+
+<ol>
+  <li>Booted back into Debian</li>
+  <li>Used Debian’s <code>fdisk</code> to create an OpenBSD partition (A6)</li>
+  <li>Resumed the installation process</li>
+</ol>
+
+<p>Now, the installer will ask you whether you want to install the
+system onto the already existing OpenBSD partition – no further
+partitioning needed!</p>
+
+<hr />
+</div>
+</article>
+</html>

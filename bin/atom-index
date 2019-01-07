@@ -1,7 +1,11 @@
 #!/bin/sh
 
 entries=$(cat <<END
-src/openbsd/installation.md
+src/web/these-pages.md
+src/web/instapaper-without-javascript.md
+src/openbsd/man-pages.md
+src/openbsd/partitioning.md
+src/openbsd/browser-refresh-on-save.md
 END)
 
 read first <<END

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Viewing man pages as HTML and PDF</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/dst/style.css" />
+<link href="file:///home/john/Sites/sh/dst/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<article>
+<h1 id="title">Viewing man pages as HTML and PDF</h1>
+<p id="meta"><time datetime="2018-10-01T01:00:00+01:00">(October, 2018)</time></p>
+<div id="text">
+
+<p>If you’ve read about OpenBSD before, you’ve probably been advised
+to read the man pages.  I’ll echo this advice, because the man pages
+are usually very good.</p>
+
+<p>However, reading man pages through <code>less</code> leaves a lot to be desired,
+both in terms of readability and navigation.  Fortunately, you can
+easily convert man pages to PDF or HTML (insert your favorite PDF
+reader or WWW browser):</p>
+
+<pre><code>MANPAGER=mupdf man -T pdf intro
+MANPAGER=seamonkey man -T html intro
+</code></pre>
+
+<p>The PDF pages are much easier to read thanks to the typography,
+while the HTML pages are much easier to browse thanks to the
+hyperlinks.  (They would be improved even further by a script that
+generates tables of contents.)</p>
+
+<hr />
+
+<p>If you use Chromium, you might find that the line above doesn’t
+quite work: Chromium seems to interpret and display the temporary
+file, lacking a <code>.html</code> extension, as a plain text file.</p>
+
+<p>The following script fixes that and should work with any <code>$BROWSER</code>:</p>
+
+<pre><code>#!/bin/sh
+
+# open man page as HTML document
+# (with .html to make sure Chrome displays it correctly)
+
+file=$(mktemp /tmp/man.XXXXXX) || exit 1
+mv $file $file.html
+MANPAGER=cat man -T html $@ &gt; $file.html
+$BROWSER $file.html
+rm $file.html
+</code></pre>
+</div>
+</article>
+</html>

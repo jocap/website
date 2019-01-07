@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Instapaper bookmarklet without JavaScript</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/dst/style.css" />
+<link href="file:///home/john/Sites/sh/dst/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<article>
+<h1 id="title">Instapaper bookmarklet without JavaScript</h1>
+<p id="meta"><time datetime="2018-10-04T00:00:00+01:00">(October, 2018)</time></p>
+<div id="text">
+
+<p>For the most part, I browse the web with JavaScript disabled by
+default (via <a href="https://noscript.net">NoScript</a>).  I also use <a href="https://instapaper.com">Instapaper</a>
+to save articles for later.  Unfortunately, the bookmarklet<sup id="fnref:b"><a href="#fn:b" class="footnote">1</a></sup>
+provided by Instapaper requires JavaScript to be enabled on the
+site to be saved.</p>
+
+<p>For this reason, I cobbled together my own bookmarklet, inspired
+by the ones provided by <a href="https://pinboard.in">Pinboard</a> (an even better service):</p>
+
+<pre><code>javascript:void(open('https://www.instapaper.com/hello2?u='+encodeURIComponent(location.href)+'&amp;t='+(document.title),'Instapaper','toolbar=no,width=500,height=350'))
+</code></pre>
+
+<p>Here it is as a link that you can drag to your bookmarks:
+<a href="javascript:void(open('https://www.instapaper.com/hello2?u='+encodeURIComponent(location.href)+'&amp;t='+(document.title),'Instapaper','toolbar=no,width=500,height=350'))">Add to Instapaper</a></p>
+
+<hr />
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:b">
+      <p>“A bookmarklet is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser.” – <a href="https://en.wikipedia.org/wiki/Bookmarklet">Wikipedia</a> <a href="#fnref:b" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+</article>
+</html>

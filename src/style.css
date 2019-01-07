@@ -1,0 +1,83 @@
+body {
+	line-height: 1.45;
+	font-size: 17px;
+	font-family: "Times New Roman", Times, "DejaVu Serif", serif;
+	color: #111;
+	margin: 2em auto;
+	padding: 0 2em;
+	max-width: 500px;
+	-webkit-text-size-adjust: none;
+//	text-decoration-skip-ink: none; /* looks weird in chrome */
+}
+
+q:before { content: open-quote; }
+q:after { content: close-quote; }
+html[lang=sv] q { quotes: "»" "«" "’" "’"; }
+html[lang=en] q { quotes: "“" "”" "‘" "’"; }
+
+a:hover { opacity: 0.8; }
+
+hr { color: #ccc; }
+
+#index > header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+}
+#index > header h1 {
+	margin-bottom: 0;
+}
+#index > header a {
+	font-variant: small-caps;
+}
+#index > p {
+	font-size: 1.3em;
+}
+#index > ul {
+	padding-left: 0;
+	list-style-type: none;
+}
+#index > ul > h3 {
+	font-size: 1.1em;
+	font-style: italic;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+article > h1 {
+	font-size: 1.7em;
+	margin-bottom: 1rem;
+}
+p#meta {
+	color: gray;
+	margin-top: 0;
+}
+
+pre, code {
+	background: #eff5ff;
+}
+code {
+	font-size: 0.7em;
+}
+pre {
+	overflow-x: auto;
+	padding: 1em;
+	-webkit-overflow-scrolling: touch;
+}
+
+sup {
+	vertical-align: super;
+	font-size: 0.7em;
+	line-height: 0;
+}
+.footnote, .reversefootnote {
+	text-decoration: none;
+}
+
+table {
+	border-spacing: 0.8em 0.2em;
+	margin-left: -0.8em;
+}
+table td {
+	vertical-align: baseline;
+}

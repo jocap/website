@@ -1,0 +1,343 @@
+/*** Variables and media queries */
+
+:root {
+    --serif: Georgia, "Times New Roman", Times, serif;
+    --sans-serif: Verdana, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif;
+    --monospace: monospace;
+    --bg: #fdfdfd;
+    --text-color: #111;
+
+    --select-color: #c00;
+    --hover-color: rgba(160, 0, 0, 0.8);
+    --link-color: #1a0dab;
+
+    --width: 80rem;
+    --toc-width: 30rem;
+    --text-width: calc(var(--width) - var(--toc-width));
+    --divider: calc(100% - var(--toc-width));
+    --spacing: 2em;
+}
+
+@media (max-width: 845px) {
+    .section-number-2, .section-number-3, .section-number-4, .section-number-5, .section-number-6 {
+        display: none;
+    }
+    body #table-of-contents {
+        float: inherit;
+        position: inherit;
+        margin: 0 0 var(--spacing);
+        --padding: 1.5em;
+        width: calc(100% - calc(var(--padding) * 2));
+        padding: 1.25em var(--padding);
+        background: #f0f0f0;
+    }
+    body #content > div:not(#table-of-contents) {
+        margin: 0;
+        max-width: 100%;
+        min-width: inherit;
+        text-align: left;
+    }
+    body pre.src:before {
+        display: none !important;
+    }
+}
+
+/*** Typography */
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.5em;
+    font-family: var(--serif);
+    line-height: 1.6;
+    background: var(--bg);
+    margin: 0 var(--spacing);
+    color: var(--text-color);
+    -webkit-text-size-adjust: none;
+}
+
+/**** Headings */
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+    -moz-hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+h2 { margin-top: 1.5em; }
+h5, h6 { font-family: var(--sans-serif); }
+h3, h4 { font-family: var(--serif); }
+h3, h4, h5, h6 { font-weight: normal; }
+h4 {
+    font-style: italic;
+    font-size: 1em;
+    margin-bottom: 0;
+}
+h5, h6 { font-size: 0.8em; }
+h6 { font-style: italic; }
+
+/**** Text elements */
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+a:hover {
+    color: white;
+    background: var(--hover-color);
+}
+
+li {
+    text-align: left;
+}
+
+blockquote {
+    font-style: italic;
+    margin-left: 3.5em;
+    margin-right: 3.5em;
+}
+
+blockquote i, blockquote em { font-style: normal; }
+blockquote i i, blockquote em em { font-style: italic; }
+
+/**** Layout elements */
+
+hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid var(--gray);
+    border-bottom: 1px solid transparent;
+    margin-top: 1em;
+}
+
+/**** Tables and figures */
+
+img {
+    max-width: 100%;
+}
+
+.figure {
+    padding: 0; /* is this a good idea? */
+}
+
+table th {
+    min-width: 11rem;
+}
+table code {
+    -moz-hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+/**** Code */
+
+code {
+    font-style: italic;
+    padding: 0 2px;
+    font-size: 1.3rem;
+}
+
+pre {
+    font-family: var(--monospace);
+    overflow-x: auto !important;
+    box-shadow: none;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 1.2rem;
+    word-break: keep-all;
+}
+
+pre, code {
+    -moz-hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+pre.src:before { /* org-mode programming language indicators */
+    top: 0;
+    right: 0;
+    border-color: #ccc;
+    border-width: 0 0 1px 1px;
+}
+pre.src-bat:before { content: 'batch'; }
+
+/*** Footnotes */
+
+.footref:hover { text-decoration: none; }
+.footref:before { content: "["; }
+.footref:after { content: "]"; }
+
+#footnotes {
+    border-top: 1px solid var(--gray);
+}
+
+#footnotes > h2 {
+    text-align: right !important;
+    font-size: inherit;
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
+.footpara {
+    display: block;
+}
+
+.footnum {
+    --font-size: 3.4rem;
+    font-size: var(--font-size);
+    padding: 1px calc(var(--font-size) / 3);
+    float: left;
+    clear: left;
+    margin-right: 0.3em;
+    background: var(--gray);
+    color: white;
+    font-weight: bold;
+    font-family: var(--sans-serif);
+}
+.footnum:hover {
+    text-decoration: none;
+    background: black;
+    color: white;
+}
+
+/*** Main content layout */
+
+#content {
+    max-width: var(--width);
+    margin: 0 auto;
+}
+
+h1.title {
+    font-size: 2.8rem;
+    background: var(--bg);
+    padding: 1em;
+    margin: 0 0 1em;
+    border-bottom: 1px solid var(--gray);
+}
+
+h1.title:after {
+    font: 1.6rem/1.0 var(--serif);
+    font-weight: normal;
+    font-variant: small-caps;
+    color: #555;
+    display: block;
+    margin-top: 0.5em;
+    content: "John Ankarström";
+}
+
+/**** Table of Contents */
+
+#table-of-contents {
+    font-family: var(--sans-serif);
+    float: right;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 1em;
+    width: calc(100% - var(--divider) - var(--spacing));
+}
+
+#table-of-contents h2 {
+    font-size: 1.44rem;
+}
+
+#text-table-of-contents {
+    font-size: 1.3rem;
+    line-height: 1.5;
+}
+#text-table-of-contents ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+#text-table-of-contents a {
+    display: block;
+    padding: 0.2em 1em;
+    text-decoration: none;
+}
+#text-table-of-contents a:hover {
+    color: var(--link-color);
+    background: transparent;
+}
+#text-table-of-contents a.active {
+    background: rgb(255, 248, 212);
+    color: var(--select-color);
+}
+#text-table-of-contents .heading-sub {
+    font-style: italic;
+}
+
+#text-table-of-contents > ul ul a { padding-left: 30px; } /* second */
+#text-table-of-contents > ul ul ul a { padding-left: 50px; } /* third */
+#text-table-of-contents > ul ul ul ul a { padding-left: 70px; } /* fourth */
+#text-table-of-contents > ul ul ul ul ul a { padding-left: 90px; } /* fifth */
+#text-table-of-contents > ul ul ul ul ul ul a { padding-left: 120px; } /* sixth */
+
+/* Remove margin from ToC heading and first heading in text */
+#table-of-contents h2, #table-of-contents + .outline-2 > h2 {
+    margin-top: 0;
+}
+
+/**** Special containers */
+
+div.abstract:before, div.introduction:before {
+    font-style: italic;
+    text-align: center;
+    display: block;
+}
+div.abstract:before { content: "Abstract"; }
+div.introduction:before { content: "Introduction"; }
+
+div.note {
+    background: rgb(255, 248, 212);
+    border: 1px dotted #ccc;
+    padding: 1.25em 1.5em;
+    margin: 1em 0;
+    font-style: italic;
+}
+div.note p { margin: 0.5em 0; }
+div.note :first-child { margin-top: 0; }
+div.note :last-child { margin-bottom: 0; }
+
+/**** Main text (typography) */
+
+#content > div:not(#table-of-contents) {
+    max-width: var(--text-width);
+    text-align: justify;
+    word-break: break-word;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    transition: max-width 0.2s ease-in-out;
+}
+
+/**** Section headings */
+
+.section-number-2, .section-number-3, .section-number-4, .section-number-5, .section-number-6 {
+    float: right;
+    background: #800;
+    color: white;
+    padding: 0 0.4em;
+    margin: 0 0 0.5em 1em;
+}
+
+#content > div:not(#table-of-contents) .heading-sub {
+    font-weight: normal;
+}
+#content > div:not(#table-of-contents) .heading-sub:before {
+    content: "\a";
+    white-space: pre-line;
+}
+
+/*** Postamble */
+#postamble {
+    text-align: right;
+    margin: 1em;
+    font-family: var(--sans-serif);
+    font-size: 0.8em;
+}

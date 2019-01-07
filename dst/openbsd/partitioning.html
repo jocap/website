@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>How I partition OpenBSD</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/dst/style.css" />
+<link href="file:///home/john/Sites/sh/dst/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<article>
+<h1 id="title">How I partition OpenBSD</h1>
+<p id="meta"><time datetime="2018-10-01T00:00:00+01:00">(October, 2018)</time></p>
+<div id="text">
+
+<p>For the search engines, here are a couple of keywords: <strong>how to
+easily install OpenBSD on an existing partition</strong>.</p>
+
+<p>OpenBSD lacks a graphical installer.  Luckily, the text-based
+installer is one of the best I’ve used.  However – as always, when
+it comes to disk partitioning, you need to be sure about what you’re
+doing, and when I first tried to install OpenBSD, I just couldn’t
+wrap my head around the version of <code>fdisk</code> provided by OpenBSD.
+Here’s what I did instead:</p>
+
+<ol>
+  <li>Booted back into Debian</li>
+  <li>Used Debian’s <code>fdisk</code> to create an OpenBSD partition (A6)</li>
+  <li>Resumed the installation process</li>
+</ol>
+
+<p>At this point, you’re asked if you want to install the system onto
+the already existing OpenBSD partition – no further partitioning needed!</p>
+
+<hr />
+
+<p>I ended up with the following partitions:</p>
+
+<pre><code>Filesystem     Size    Used   Avail Capacity  Mounted on
+/dev/sd0a     1005M    128M    826M    13%    /
+/dev/sd0o     46.6G    3.8G   40.5G     9%    /home
+/dev/sd0d      3.9G    2.3M    3.7G     0%    /tmp
+/dev/sd0f      2.0G    1.4G    472M    75%    /usr
+/dev/sd0g     1005M    193M    761M    20%    /usr/X11R6
+/dev/sd0h      9.8G    4.9G    4.4G    53%    /usr/local
+/dev/sd0n      5.9G    6.0K    5.6G     0%    /usr/obj
+/dev/sd0m      2.0G    504M    1.4G    26%    /usr/src
+/dev/sd0e     11.0G    102M   10.3G     1%    /var
+</code></pre>
+
+<p>As you can see, a huge <code>/home</code> partition, but a rather small <code>/usr</code>
+partition.  Normally, this shouldn’t be a problem, but as I was
+compiling a port of the music player <a href="https://strawbs.org/">strawberry</a>, I ran out of
+space!</p>
+
+<p>As it turns out, the compilation process in <code>/usr/ports</code> was putting
+tons of object and source files in directories under <code>/usr</code>, but
+not in those designated for them: <code>/usr/obj</code> and <code>/usr/src</code>.  I
+solved this by adding the following to my <code>/etc/mk.conf</code>:</p>
+
+<pre><code>WRKOBJDIR=/usr/obj
+DISTDIR=/usr/src
+</code></pre>
+
+<p>As such, have a few search engine keywords: <strong>how to avoid running out of space in /usr on OpenBSD.</strong></p>
+</div>
+</article>
+</html>
