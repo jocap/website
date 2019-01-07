@@ -1,12 +1,14 @@
 #!/bin/sh
 
-: ${title:=John Ankarström}
-: ${author:=John Ankarström}
-
 index=$(cat <<END
 2018:
+Web;
+src/web/separation-of-concerns.md
+src/web/instapaper-without-javascript.md
+src/english/texts/replacing-javascript/
 OpenBSD;
 src/openbsd/installation.md
+src/openbsd/browser-refresh-on-save.md
 END)
 
 list=$(echo "$index" | while read line; do
@@ -15,10 +17,12 @@ list=$(echo "$index" | while read line; do
 	elif [ $(echo "$line" | grep ';$') ]; then
 		echo "<h3>${line%;}</h3>" # topic
 	else
-		title=$(cat "$line" | head -n 2 | tail -n 1)
+		file="$line"
+		[ "${file%/}" = "$file" ] || file="${line}index.html"
+		title=$(cat "$file" | head -n 2 | tail -n 1)
 		title="${title#\# }"
 		url="${line#src/}"
-		url="${url%.md}.html"
+		[ "${url%.md}" = "$url" ] || url="${url%.md}.html"
 		cat <<END
 <li><a href="$url">$title</a></li>
 END
@@ -31,5 +35,6 @@ $list
 </ul>
 END)
 
-export title content
+export title author content
+content=$(bin/html-index-tpl)
 bin/html-page-tpl

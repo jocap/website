@@ -1,10 +1,13 @@
 #!/bin/sh
-find src/ -type f -name '*.md' | while read f; do
-	f="dst/${f#src/}"
-	f="${f%.md}.html"
-	gmake "$f"
-done
-find src/ -type f -name '*.html' | while read f; do
-	f="dst/${f#src/}"
-	gmake "$f"
+find src/ -type f | while read f; do
+	case "$f" in
+	*.md)
+		f="dst/${f#src/}"
+		f="${f%.md}.html"
+		gmake "$f"
+		;;
+	*)
+		f="dst/${f#src/}"
+		gmake "$f"
+	esac
 done

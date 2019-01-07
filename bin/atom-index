@@ -4,10 +4,11 @@ entries=$(cat <<END
 src/openbsd/installation.md
 END)
 
-first=$(echo "$entries" | head -1)
-datetime=$(cat "$first" | head -1)
+read first <<END
+$entries
+END
+read datetime < $first
 
-title='John Ankarström'
 content=$(echo "$entries" | while read entry; do
 	url="https://john.ankarstrom.se/${entry#src/}"
 	url="${url%.md}.html"

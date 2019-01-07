@@ -1,7 +1,5 @@
 #!/bin/sh
 
-: ${author:=John Ankarström}
-
 read datetime
 read title
 title=${title#\# }
@@ -9,9 +7,13 @@ read meta
 text=$(bin/markdown)
 
 content=$(cat <<CONTENT
+<article>
 <h1 id="title">$title</h1>
 ${meta:+<p id=\"meta\">$meta</p>}
+<div id="text">
 $text
+</div>
+</article>
 CONTENT)
 
 export author datetime title meta content

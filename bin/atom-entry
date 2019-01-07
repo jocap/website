@@ -1,7 +1,5 @@
 #!/bin/sh
 
-: ${author:='John Ankarström'}
-
 if [ -z "$url" ]; then
 	cat <<USAGE > /dev/stderr
 usage: url=url $0
