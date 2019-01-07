@@ -7,10 +7,12 @@ USAGE
 	return 1
 fi
 
+read
 read datetime
 read title
 title=${title#\# }
 read meta
+read lang
 text=$(cmark)
 
 cat <<CONTENT
