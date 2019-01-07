@@ -12,7 +12,7 @@ dst/%: src/%
 	mkdir -p $$(dirname $@)
 	cp $< $@
 
-dst/index.html: bin/html-index bin/html-index-tpl
+dst/index.html: bin/html-index bin/html-index-tpl bin/html-page-tpl
 	mkdir -p dst
 	bin/html-index > $@
 
