@@ -2,12 +2,12 @@
 find src/ -type f | while read f; do
 	case "$f" in
 	*.md)
-		f="dst/${f#src/}"
+		f="docs/${f#src/}"
 		f="${f%.md}.html"
 		gmake "$f"
 		;;
 	*)
-		f="dst/${f#src/}"
+		f="docs/${f#src/}"
 		gmake "$f"
 	esac
 done
