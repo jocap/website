@@ -19,7 +19,7 @@ list=$(echo "$index" | while read line; do
 	else
 		file="$line"
 		[ "${file%/}" = "$file" ] || file="${line}index.html"
-		title=$(cat "$file" | head -n 2 | tail -n 1)
+		title=$(head -n 3 "$file" | tail -n 1)
 		title="${title#\# }"
 		url="${line#src/}"
 		[ "${url%.md}" = "$url" ] || url="${url%.md}.html"
@@ -35,6 +35,6 @@ $list
 </ul>
 END)
 
-export title author content
+export lang title author content
 content=$(bin/html-index-tpl)
 bin/html-page-tpl

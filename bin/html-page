@@ -1,20 +1,22 @@
 #!/bin/sh
 
+read
 read datetime
 read title
 title=${title#\# }
 read meta
+read lang
 text=$(bin/markdown)
 
 content=$(cat <<CONTENT
 <article>
 <h1 id="title">$title</h1>
-${meta:+<p id=\"meta\">$meta</p>}
+${meta:+<p id=\"meta\"><time datetime=\"$datetime\">$meta</time></p>}
 <div id="text">
 $text
 </div>
 </article>
 CONTENT)
 
-export author datetime title meta content
+export lang author datetime title meta content
 bin/html-page-tpl

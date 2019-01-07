@@ -1,7 +1,8 @@
 title := John Ankarström
 author := John Ankarström
+lang := en
 base := file:///home/john/Sites/sh/dst
-export title author base
+export title author lang base
 
 dst/%.html: src/%.md bin/html-page bin/html-page-tpl
 	mkdir -p $$(dirname $@)
