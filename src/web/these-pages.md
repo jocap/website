@@ -105,4 +105,6 @@ as well as an Atom feed – but all this other functionality is
 implemented similarly to that which I have showed above.
 
 If you're interested in seeing the entire system, check out the
-GitHub repository and the `bin/` directory in particular.
+[GitHub repository], starting with the `Makefile`.
+
+[GitHub repository]: https://github.com/jocap/website
