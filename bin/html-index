@@ -1,43 +1,72 @@
 #!/bin/sh
 
-index=$(cat <<END
-2019:
-Web;
-src/web/these-pages.md
-2018:
-Web;
-src/web/separation-of-concerns.md
-src/web/instapaper-without-javascript.md
-src/english/texts/replacing-javascript/
-OpenBSD;
-src/openbsd/man-pages.md
-src/openbsd/partitioning.md
-src/openbsd/browser-refresh-on-save.md
-END)
+# Warning: this is probably the most complicated script in the
+# project.  In the future, it should probably be broken up into
+# many scripts.
 
-list=$(echo "$index" | while read line; do
-	if [ $(echo "$line" | grep ':$') ]; then
-		echo "<h2>${line%:}</h2>" # year
-	elif [ $(echo "$line" | grep ';$') ]; then
-		echo "<h3>${line%;}</h3>" # topic
-	else
-		file="$line"
-		[ "${file%/}" = "$file" ] || file="${line}index.html"
-		title=$(head -n 3 "$file" | tail -n 1)
-		title="${title#\# }"
-		url="${line#src/}"
-		[ "${url%.md}" = "$url" ] || url="${url%.md}.html"
-		cat <<END
-<li><a href="$url">$title</a></li>
-END
-	fi
-done)
+# Posts for this index page are stored in index/$year files: one
+# line per post, containing the path of the post's source, optionally
+# prefixed with a "custom folder override" (consisting of an asterisk,
+# a space, a word and another space).  This tells the script to sort
+# that specific post under the category specified by the word.
 
-content=$(cat <<END
-<ul>
-$list
-</ul>
-END)
+# Posts without custom folder overrides are sorted under the category
+# indicated by their path.
+
+# This script loops through each year and collects each year's
+# pages, inserted under the correct category heading.
+
+full_index=
+
+for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
+	index="<h2>${year#index/}</h2>"
+	while IFS= read -r file; do
+		# special
+		case "$file" in
+		('* '*) # custom folder (= category) override
+			file=${file#* }
+			folder=${file%% *}
+			file=${file#* }
+			;;
+		(*)
+			folder=${file#src/}
+			folder=${folder%%/*}
+		esac
+
+		# create url
+		url=${file#src/}
+		case "$url" in (*.md) url=${url%.md}.html; esac
+
+		# get category
+		case "$folder" in
+			(openbsd) category=OpenBSD ;;
+			(web) category=Web ;;
+		esac
+
+		# get title
+		case "$file" in (*/) file=${file}index.html; esac
+		exec 9< "$file"
+		read <& 9
+		read datetime <& 9
+		read _title <& 9
+		_title=${_title#\# }
+
+		# add category heading unless it already exists
+		echo "$index" | grep "^<h3>$category<\/h3>\$" 1> /dev/null \
+		|| index="$index
+<h3>$category</h3>"
+
+		# add url beneath appropriate category heading
+		index=$(echo "$index" | sed "/^<h3>$category<\/h3>\$/a\\
+<li><a href=\"$url\">$_title</a></li>
+")
+	done < "$year"
+	full_index="$full_index
+$index" # done with this year
+done
+
+content="<ul>$full_index
+</ul>"
 
 export lang title author content
 content=$(bin/html-index-tpl)

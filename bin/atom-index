@@ -1,22 +1,20 @@
 #!/bin/sh
 
-entries=$(cat <<END
-src/web/these-pages.md
-src/web/instapaper-without-javascript.md
-src/openbsd/man-pages.md
-src/openbsd/partitioning.md
-src/openbsd/browser-refresh-on-save.md
-END)
+latest=$(tail -n 1 index/atom)
+exec 9< "$latest"
+read <& 9
+read datetime <& 9
 
-read first <<END
-$entries
-END
-read datetime < $first
+if whereis tac 1> /dev/null; then
+	reverse=tac # GNU
+else
+	reverse="tail -r" # BSD
+fi
 
-content=$(echo "$entries" | while read entry; do
-	url="https://john.ankarstrom.se/${entry#src/}"
-	url="${url%.md}.html"
-	cat "$entry" | url="$url" bin/atom-entry
+content=$(cat index/atom | $reverse | while read entry; do
+	url=$base/${entry#src/}
+	url=${url%.md}.html
+	cat "$entry" | url=$url bin/atom-entry
 done)
 
 export title datetime content
