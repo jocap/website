@@ -52,12 +52,12 @@ for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 		_title=${_title#\# }
 
 		# add category heading unless it already exists
-		echo "$index" | grep "^<h3>$category<\/h3>\$" 1> /dev/null \
+		printf '%s\n' "$index" | grep "^<h3>$category<\/h3>\$" 1> /dev/null \
 		|| index="$index
 <h3>$category</h3>"
 
 		# add url beneath appropriate category heading
-		index=$(echo "$index" | sed "/^<h3>$category<\/h3>\$/a\\
+		index=$(printf '%s\n' "$index" | sed "/^<h3>$category<\/h3>\$/a\\
 <li><a href=\"$url\">$_title</a></li>
 ")
 	done < "$year"
