@@ -61,7 +61,7 @@ code {
 }
 pre {
 	overflow-x: auto;
-	padding: 1em;
+	padding: 10px 16px;
 	-webkit-overflow-scrolling: touch;
 }
 
