@@ -1,7 +1,7 @@
 title ?= John Ankarström
 author ?= John Ankarström
 lang ?= en
-base ?= https://john.ankarstrom.se/
+base ?= https://john.ankarstrom.se
 export title author lang base
 
 .FORCE:
