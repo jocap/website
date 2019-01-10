@@ -16,7 +16,7 @@
 # This script loops through each year and collects each year's
 # pages, inserted under the correct category heading.
 
-full_index=
+content="<ul>"
 
 for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 	index="<h2>${year#index/}</h2>"
@@ -46,9 +46,9 @@ for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 		# get title
 		case "$file" in (*/) file=${file}index.html; esac
 		exec 9< "$file"
-		read <& 9
-		read datetime <& 9
-		read _title <& 9
+		read <&9
+		read datetime <&9
+		read _title <&9
 		_title=${_title#\# }
 
 		# add category heading unless it already exists
@@ -61,12 +61,10 @@ for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 <li><a href=\"$url\">$_title</a></li>
 ")
 	done < "$year"
-	full_index="$full_index
-$index" # done with this year
+	content=$(printf "%s\n%s\n" "$content" "$index") # done with this year
 done
 
-content="<ul>$full_index
-</ul>"
+content=$(printf "%s\n</ul>\n" "$content")
 
 export lang title author content
 content=$(bin/html-index-tpl)
