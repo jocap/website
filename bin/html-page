@@ -10,6 +10,7 @@ title=${title#\# }
 text=$(bin/markdown)
 
 content=$(cat <<CONTENT
+<a id="link-home" href="$base">&larr;</a>
 <article>
 <h1 id="title">$title</h1>
 ${meta:+<p id=\"meta\"><time datetime=\"$datetime\">$meta</time></p>}

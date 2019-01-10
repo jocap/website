@@ -7,7 +7,6 @@ body {
 	padding: 0 2em;
 	max-width: 500px;
 	-webkit-text-size-adjust: none;
-//	text-decoration-skip-ink: none; /* looks weird in chrome */
 }
 
 q:before { content: open-quote; }
@@ -42,6 +41,13 @@ hr { color: #ccc; }
 	font-style: italic;
 	font-weight: normal;
 	margin-bottom: 0.5em;
+}
+
+a#link-home {
+	text-decoration: none;
+	float: left;
+	margin-left: -3em;
+	margin-top: 7px;
 }
 
 article > h1 {
@@ -81,3 +87,35 @@ table {
 table td {
 	vertical-align: baseline;
 }
+
+article h2 + p, article h3 + p, article h4 + p, article h5 + p, article h6 + p {
+	margin-top: 0;
+}
+
+article h2 {
+	font-size: 1.4em;
+	margin-bottom: 0.8rem;
+}
+article h3 {
+	font-size: 1.2em;
+	font-style: italic;
+	font-weight: normal;
+	margin-bottom: 0.8rem;
+}
+article h4 {
+	font-size: 1.0em;
+	margin-bottom: 0.5rem;
+}
+article h5 {
+	font-size: 1.0em;
+	font-style: italic;
+	font-weight: normal;
+	margin-bottom: 0.5rem;
+}
+article h6 {
+	font-size: 1.0em;
+	display: inline;
+	margin-right: 2px;
+}
+article h6:after { content: "."; }
+article h6 + p { display: inline; }

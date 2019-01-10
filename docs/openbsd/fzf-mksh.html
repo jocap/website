@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Using fzf on OpenBSD with mksh</title>
+<meta name="author" content="John Ankarström" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="file:///home/john/Sites/sh/docs/style.css" />
+<link href="file:///home/john/Sites/sh/docs/atom.xml" rel="alternate" title="John Ankarström" type="application/atom+xml" />
+<a id="link-home" href="file:///home/john/Sites/sh/docs">&larr;</a>
+<article>
+<h1 id="title">Using fzf on OpenBSD with mksh</h1>
+<p id="meta"><time datetime="2019-01-07T22:27:59+01:00">(January, 2019)</time></p>
+<div id="text">
+
+<p><a href="https://github.com/junegunn/fzf">fzf</a> is a great tool for interactively finding and selecting files
+and directories.  Unfortunately, however, it only supports bash and
+fish, none of which I want to use on my OpenBSD system.  In this
+post, I’d like to present what I believe to be a better solution.</p>
+
+<p>Unlike many OpenBSD users, instead of the included <abbr title="Public Domain Korn Shell">(pd)ksh</abbr>, I use <a href="https://www.mirbsd.org/mksh.htm">mksh</a>, which is an
+implementation of Korn shell written by mirabilos for his MirBSD
+operating system.  Compared with OpenBSD’s default ksh, mksh lacks
+its clever support for custom completion<sup id="fnref:complete"><a href="#fn:complete" class="footnote">1</a></sup>, but in exchange,
+it offers some additional ways of interacting with the shell.</p>
+
+<p>Most interestingly, it implements the <code>evaluate-region</code> editing
+command, activated by <code>^[^E</code> (<em>meta + ctrl + e</em>):</p>
+
+<blockquote>
+  <p>Evaluates the text between the mark and the cursor
+position (the entire line if no mark is set) as function
+substitution (if it cannot be parsed, the editing state
+is unchanged and the bell is rung to signal an error);
+$? is updated accordingly.</p>
+</blockquote>
+
+<p>This means that we can execute arbitary commands through a key
+binding – exactly what we need for fzf!</p>
+
+<p>In the end, this is what I’ve been able to piece together:</p>
+
+<pre><code>export FZF_DEFAULT_COMMAND='ag --nocolor -g "" 2&gt;/dev/null'
+export FZF_DIR_COMMAND='find $PWD -type d 2&gt;/dev/null'
+export FZF_IGNORE='-E "/\.cache\/|/\.git|/\.npm|/\.cpan"'
+
+bind -m ^T='^[b^[f ^[ echo $(eval "$FZF_DEFAULT_COMMAND" | grep -v $FZF_IGNORE | fzf -m --reverse)^[^E'
+bind -m ^[^T='^[b^[f ^[ echo $(eval "$FZF_DEFAULT_COMMAND" | grep -v $FZF_IGNORE | fzf -m --reverse | xargs -L1 readlink -f 2&gt;/dev/null)^[^E'
+bind -m ^[c='^Ucd ^[ echo $(eval "$FZF_DIR_COMMAND" | grep -v $FZF_IGNORE | fzf --reverse)^[^E^J'
+bind -m ^[^R=" ^Aecho \$(fc -nl 0 | trim | fzf +s --tac -q '^E')^[^E^J"
+# ^ warning: beware of single quotes and mksh magic!
+</code></pre>
+
+<ul>
+  <li><code>^T</code> appends your fzf selection to what you’ve already written</li>
+  <li><code>^[^T</code> does the same, but follows symbolic links, appending the
+path(s) of the target(s)</li>
+  <li><code>^[c</code> discards what you’ve written and cd’s to a given directory</li>
+  <li><code>^[^R</code> searches through your command history (based on what
+you’ve already written)</li>
+</ul>
+
+<p>The good thing about this approach is that you get a very clean
+command history, as none of the above key bindings press Return.
+This is a clear benefit over (pd)ksh, in which the user cannot
+execute commands without pressing Return (and thus adding to the
+command history).</p>
+
+<p>The drawback is that it’s a hacky approach.  Because of the way
+it’s implemented, the last key binding breaks if your original input
+contains single quotes.  Still, it works 90% of the time, and I
+guess that’s good enough.</p>
+
+<hr />
+<div class="footnotes">
+  <ol>
+    <li id="fn:complete">
+      <p>For more information, check out the description in
+<a href="https://man.openbsd.org/ksh.1#Emacs_editing_mode">ksh(1)</a> of the <code>complete</code> editing command. <a href="#fnref:complete" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</div>
+</article>
+</html>
