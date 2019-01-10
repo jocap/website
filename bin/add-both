@@ -1,0 +1,4 @@
+#!/bin/sh
+
+bin/add-html "$1"
+bin/add-atom "$1"
