@@ -53,18 +53,17 @@ for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 
 		# add category heading unless it already exists
 		printf '%s\n' "$index" | grep "^<h3>$category<\/h3>\$" 1> /dev/null \
-		|| index="$index
-<h3>$category</h3>"
+		|| index=$(printf '%s\n<h3>%s</h3>' "$index" "$category")
 
 		# add url beneath appropriate category heading
 		index=$(printf '%s\n' "$index" | sed "/^<h3>$category<\/h3>\$/a\\
 <li><a href=\"$url\">$_title</a></li>
 ")
 	done < "$year"
-	content=$(printf "%s\n%s\n" "$content" "$index") # done with this year
+	content=$(printf '%s\n%s\n' "$content" "$index") # done with this year
 done
 
-content=$(printf "%s\n</ul>\n" "$content")
+content=$(printf '%s\n</ul>\n' "$content")
 
 export lang title author content
 content=$(bin/html-index-tpl)
