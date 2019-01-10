@@ -39,7 +39,8 @@ for year in $(find index/ -type f -name '[0-9]*' | sort -r); do
 
 		# get category
 		case "$folder" in
-			(openbsd) category=OpenBSD ;;
+			(openbsd) category='Unix and OpenBSD' ;;
+			(unix) category='Unix and OpenBSD' ;;
 			(web) category=Web ;;
 		esac
 
