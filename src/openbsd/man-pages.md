@@ -13,13 +13,20 @@ both in terms of readability and navigation.  Fortunately, you can
 easily convert man pages to PDF or HTML (insert your favorite PDF
 reader or WWW browser):
 
-    MANPAGER=mupdf man -T pdf intro
-    MANPAGER=seamonkey man -T html intro
+    $ MANPAGER=mupdf man -T pdf intro
+    $ MANPAGER=seamonkey man -T html intro
 
 The PDF pages are much easier to read thanks to the typography,
 while the HTML pages are much easier to browse thanks to the
 hyperlinks.  (They would be improved even further by a script that
 generates tables of contents.)
+
+If you don't want to leave the terminal, you can still enjoy the
+benefits of hypertext by reading man pages in lynx, using either
+of the following commands:
+
+    $ man -T html intro | lynx -stdin
+    $ MANPAGER=lynx\ -force_html man -T html intro
 
 ***
 

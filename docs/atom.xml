@@ -154,13 +154,19 @@ are usually very good.</p>
 both in terms of readability and navigation.  Fortunately, you can
 easily convert man pages to PDF or HTML (insert your favorite PDF
 reader or WWW browser):</p>
-<pre><code>MANPAGER=mupdf man -T pdf intro
-MANPAGER=seamonkey man -T html intro
+<pre><code>$ MANPAGER=mupdf man -T pdf intro
+$ MANPAGER=seamonkey man -T html intro
 </code></pre>
 <p>The PDF pages are much easier to read thanks to the typography,
 while the HTML pages are much easier to browse thanks to the
 hyperlinks.  (They would be improved even further by a script that
 generates tables of contents.)</p>
+<p>If you don't want to leave the terminal, you can still enjoy the
+benefits of hypertext by reading man pages in lynx, using either
+of the following commands:</p>
+<pre><code>$ man -T html intro | lynx -stdin
+$ MANPAGER=lynx\ -force_html man -T html intro
+</code></pre>
 <hr />
 <p>If you use Chromium, you might find that the line above doesn't
 quite work: Chromium seems to interpret and display the temporary
