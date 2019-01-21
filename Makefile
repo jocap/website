@@ -4,6 +4,8 @@ lang ?= en
 base ?= https://john.ankarstrom.se
 export title author lang base
 
+all: site
+
 .FORCE:
 
 docs/%.html: src/%.md bin/html-page bin/html-page-tpl
@@ -27,4 +29,3 @@ pages:
 
 site: pages docs/index.html docs/atom.xml
 
-all: site
