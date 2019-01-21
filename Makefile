@@ -22,7 +22,9 @@ docs/atom.xml: .FORCE
 	mkdir -p docs
 	bin/atom-index > $@
 
-all:
-	bin/make-all
+pages:
+	bin/make-pages
 
-site: all docs/index.html docs/atom.xml
+site: pages docs/index.html docs/atom.xml
+
+all: site
